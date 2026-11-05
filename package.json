@@ -23,7 +23,9 @@
     "url": "https://github.com/tomoki1207/vscode-pdfviewer/issues"
   },
   "activationEvents": [
-    "onCustomEditor:pdf.preview"
+    "onCustomEditor:pdf.preview",
+    "onCommand:pdf-preview.toggleHighlight",
+    "onCommand:pdf-preview.clearHighlights"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -31,6 +33,38 @@
       "untrustedWorkspaces": {
         "supported": true
       }
+    },
+    "commands": [
+      {
+        "command": "pdf-preview.toggleHighlight",
+        "title": "Toggle Highlight on Selection",
+        "category": "PDF"
+      },
+      {
+        "command": "pdf-preview.clearHighlights",
+        "title": "Remove All Highlights in This PDF",
+        "category": "PDF"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "pdf-preview.toggleHighlight",
+        "key": "ctrl+s",
+        "mac": "cmd+s",
+        "when": "activeCustomEditorId == 'pdf.preview'"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "pdf-preview.toggleHighlight",
+          "when": "activeCustomEditorId == 'pdf.preview'"
+        },
+        {
+          "command": "pdf-preview.clearHighlights",
+          "when": "activeCustomEditorId == 'pdf.preview'"
+        }
+      ]
     },
     "customEditors": [
       {
