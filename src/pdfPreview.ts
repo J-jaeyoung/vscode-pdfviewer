@@ -1,9 +1,10 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { Disposable } from './disposable';
+import { Highlight, HighlightStore } from './highlights';
 
 function escapeAttribute(value: string | vscode.Uri): string {
-  return value.toString().replace(/"/g, '&quot;');
+  return value.toString().replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 }
 
 type PreviewState = 'Disposed' | 'Visible' | 'Active';
@@ -13,8 +14,9 @@ export class PdfPreview extends Disposable {
 
   constructor(
     private readonly extensionRoot: vscode.Uri,
-    private readonly resource: vscode.Uri,
-    private readonly webviewEditor: vscode.WebviewPanel
+    public readonly resource: vscode.Uri,
+    private readonly webviewEditor: vscode.WebviewPanel,
+    private readonly highlights: HighlightStore
   ) {
     super();
     const resourceRoot = resource.with({
@@ -38,6 +40,34 @@ export class PdfPreview extends Disposable {
             );
             break;
           }
+          case 'highlights-changed': {
+            this.highlights.set(
+              resource,
+              message.highlights as Highlight[],
+              this
+            );
+            break;
+          }
+          case 'notify': {
+            vscode.window.setStatusBarMessage(String(message.message), 4000);
+            break;
+          }
+        }
+      })
+    );
+
+    // Keep other previews of the same PDF (e.g. split editors) in sync.
+    this._register(
+      highlights.onDidChange((e) => {
+        if (
+          e.origin !== this &&
+          e.resource.toString() === this.resource.toString() &&
+          this._previewState !== 'Disposed'
+        ) {
+          this.webviewEditor.webview.postMessage({
+            type: 'set-highlights',
+            highlights: e.highlights,
+          });
         }
       })
     );
@@ -74,6 +104,16 @@ export class PdfPreview extends Disposable {
 
     this.webviewEditor.webview.html = this.getWebviewContents();
     this.update();
+  }
+
+  /** Highlights the selected text, or removes highlights under it. */
+  public toggleHighlight(): void {
+    if (this._previewState !== 'Disposed') {
+      this.webviewEditor.webview.postMessage({
+        type: 'command',
+        command: 'toggleHighlight',
+      });
+    }
   }
 
   private reload(): void {
@@ -114,6 +154,7 @@ export class PdfPreview extends Disposable {
         scrollMode: config.get('default.scrollMode') as string,
         spreadMode: config.get('default.spreadMode') as string,
       },
+      highlights: this.highlights.get(this.resource),
     };
 
     const head = `<!DOCTYPE html>

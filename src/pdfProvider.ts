@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { HighlightStore } from './highlights';
 import { PdfPreview } from './pdfPreview';
 
 export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
@@ -7,7 +8,10 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
   private readonly _previews = new Set<PdfPreview>();
   private _activePreview: PdfPreview | undefined;
 
-  constructor(private readonly extensionRoot: vscode.Uri) {}
+  constructor(
+    private readonly extensionRoot: vscode.Uri,
+    private readonly highlights: HighlightStore
+  ) {}
 
   public openCustomDocument(uri: vscode.Uri): vscode.CustomDocument {
     return { uri, dispose: (): void => {} };
@@ -20,7 +24,8 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
     const preview = new PdfPreview(
       this.extensionRoot,
       document.uri,
-      webviewEditor
+      webviewEditor,
+      this.highlights
     );
     this._previews.add(preview);
     this.setActivePreview(preview);
