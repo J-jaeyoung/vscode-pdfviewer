@@ -9,6 +9,7 @@ export interface Highlight {
   page: number;
   rects: number[][];
   text?: string;
+  comment?: string;
   createdAt?: number;
 }
 
@@ -26,6 +27,7 @@ function isHighlight(value: unknown): value is Highlight {
     typeof h.id === 'string' &&
     Number.isInteger(h.page) &&
     h.page > 0 &&
+    (h.comment === undefined || typeof h.comment === 'string') &&
     Array.isArray(h.rects) &&
     h.rects.every(
       (r) =>
@@ -48,8 +50,24 @@ export class HighlightStore {
 
   constructor(private readonly memento: vscode.Memento) {}
 
+  private static readonly prefix = 'highlights:';
+
   private key(resource: vscode.Uri): string {
-    return `highlights:${resource.toString()}`;
+    return HighlightStore.prefix + resource.toString();
+  }
+
+  /** PDFs that have stored highlights (needs Memento.keys, VS Code 1.70+). */
+  public resources(): vscode.Uri[] {
+    const memento = this.memento as vscode.Memento & {
+      keys?: () => readonly string[];
+    };
+    if (typeof memento.keys !== 'function') {
+      return [];
+    }
+    return memento
+      .keys()
+      .filter((k) => k.startsWith(HighlightStore.prefix))
+      .map((k) => vscode.Uri.parse(k.slice(HighlightStore.prefix.length)));
   }
 
   public get(resource: vscode.Uri): Highlight[] {

@@ -25,3 +25,47 @@ html, body {
 .pdfViewer .page .vscode-pdf-highlights path {
   fill: rgb(255, 232, 64);
 }
+
+/* Comment markers (see "PDF: Add/Edit Comment on Highlight"). */
+.pdfViewer .page .vscode-pdf-comments {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.pdfViewer .page .vscode-pdf-comment-marker {
+  position: absolute;
+  width: 14px;
+  height: 11px;
+  border-radius: 3px;
+  background: rgb(255, 160, 0);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.pdfViewer .page .vscode-pdf-comment-marker::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  bottom: -4px;
+  border-left: 4px solid transparent;
+  border-right: 2px solid transparent;
+  border-top: 4px solid rgb(255, 160, 0);
+}
+
+/* Highlights with a comment use the marker's orange so they stand out. */
+.pdfViewer .page .vscode-pdf-highlights path.vscode-pdf-commented {
+  fill: rgb(255, 190, 100);
+}
+/* Flash a highlight revealed from the "PDF Comments" view. */
+.pdfViewer .page .vscode-pdf-highlights path.vscode-pdf-flash {
+  animation: vscode-pdf-flash 0.4s ease-in-out 4 alternate;
+}
+@keyframes vscode-pdf-flash {
+  to {
+    fill: rgb(255, 120, 0);
+  }
+}

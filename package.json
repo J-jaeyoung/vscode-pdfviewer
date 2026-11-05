@@ -25,7 +25,10 @@
   "activationEvents": [
     "onCustomEditor:pdf.preview",
     "onCommand:pdf-preview.toggleHighlight",
-    "onCommand:pdf-preview.clearHighlights"
+    "onCommand:pdf-preview.commentHighlight",
+    "onCommand:pdf-preview.clearHighlights",
+    "onCommand:pdf-preview.revealHighlight",
+    "onView:pdf-preview.comments"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -41,16 +44,40 @@
         "category": "PDF"
       },
       {
+        "command": "pdf-preview.commentHighlight",
+        "title": "Add/Edit Comment on Highlight",
+        "category": "PDF"
+      },
+      {
         "command": "pdf-preview.clearHighlights",
         "title": "Remove All Highlights in This PDF",
         "category": "PDF"
+      },
+      {
+        "command": "pdf-preview.revealHighlight",
+        "title": "Go to Comment",
+        "category": "PDF"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "pdf-preview.comments",
+          "name": "PDF Comments"
+        }
+      ]
+    },
     "keybindings": [
       {
         "command": "pdf-preview.toggleHighlight",
         "key": "ctrl+s",
         "mac": "cmd+s",
+        "when": "activeCustomEditorId == 'pdf.preview'"
+      },
+      {
+        "command": "pdf-preview.commentHighlight",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
         "when": "activeCustomEditorId == 'pdf.preview'"
       }
     ],
@@ -61,8 +88,16 @@
           "when": "activeCustomEditorId == 'pdf.preview'"
         },
         {
+          "command": "pdf-preview.commentHighlight",
+          "when": "activeCustomEditorId == 'pdf.preview'"
+        },
+        {
           "command": "pdf-preview.clearHighlights",
           "when": "activeCustomEditorId == 'pdf.preview'"
+        },
+        {
+          "command": "pdf-preview.revealHighlight",
+          "when": "false"
         }
       ]
     },

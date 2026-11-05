@@ -10,6 +10,11 @@ Select text in a PDF and press `Ctrl+S` (`Cmd+S` on macOS) (command **PDF: Toggl
 Select any part of an existing highlight and press it again to remove that highlight.
 **PDF: Remove All Highlights in This PDF** removes every highlight in the current PDF.
 
+To comment, select text (or part of a highlight) and press `Ctrl+Shift+S` (**PDF: Add/Edit Comment on Highlight**).
+Commented highlights are orange (plain ones are yellow) and get a marker in the page margin; hover it to read the comment, click it to edit. Save an empty comment to remove it.
+The **PDF Comments** view in the Explorer lists the comments of the PDFs in your workspace by page; click one to open the PDF at that spot.
+A highlight with a comment is not removed by `Ctrl+S`; clear its comment first.
+
 Highlights are saved by the extension per file path; the PDF file itself is not modified,
 so they are only visible in this viewer. They work only where the PDF has selectable text.
 The shortcut can be changed in Keyboard Shortcuts (`pdf-preview.toggleHighlight`).
