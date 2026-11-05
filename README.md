@@ -21,6 +21,8 @@ Display pdf in VSCode.
       kind: OptionKind.VIEWER
     },
     ```
+1. Remove the `Ctrl/Cmd+P` print `keydown` listener from lib/web/viewer.js (search for `window.print();` near `"keydown"`).
+   It stops propagation, so VS Code never receives Quick Open (`Ctrl+P`) or the Command Palette (`Ctrl+Shift+P`).
 
 ## Change log
 See [CHANGELOG.md](CHANGELOG.md).
