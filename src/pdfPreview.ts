@@ -48,6 +48,10 @@ export class PdfPreview extends Disposable {
             );
             break;
           }
+          case 'edit-comment': {
+            this.editComment(message);
+            break;
+          }
           case 'notify': {
             vscode.window.setStatusBarMessage(String(message.message), 4000);
             break;
@@ -108,10 +112,52 @@ export class PdfPreview extends Disposable {
 
   /** Highlights the selected text, or removes highlights under it. */
   public toggleHighlight(): void {
+    this.postCommand('toggleHighlight');
+  }
+
+  /** Adds or edits the comment of the highlight under the selection. */
+  public commentHighlight(): void {
+    this.postCommand('commentHighlight');
+  }
+
+  /** Brings this preview to the front and scrolls to the highlight. */
+  public revealHighlight(id: string): void {
+    if (this._previewState === 'Disposed') {
+      return;
+    }
+    this.webviewEditor.reveal(this.webviewEditor.viewColumn);
+    this.webviewEditor.webview.postMessage({ type: 'reveal', id });
+  }
+
+  private postCommand(command: string): void {
     if (this._previewState !== 'Disposed') {
+      this.webviewEditor.webview.postMessage({ type: 'command', command });
+    }
+  }
+
+  private async editComment(message: {
+    id: string;
+    comment: string;
+    text: string;
+  }): Promise<void> {
+    const snippet = String(message.text || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const value = await vscode.window.showInputBox({
+      prompt: snippet
+        ? `Comment on "${
+            snippet.length > 60 ? snippet.slice(0, 60) + '…' : snippet
+          }"`
+        : 'Comment',
+      placeHolder: 'Leave empty to remove the comment',
+      value: String(message.comment || ''),
+      ignoreFocusOut: true,
+    });
+    if (value !== undefined && this._previewState !== 'Disposed') {
       this.webviewEditor.webview.postMessage({
-        type: 'command',
-        command: 'toggleHighlight',
+        type: 'set-comment',
+        id: message.id,
+        comment: value,
       });
     }
   }

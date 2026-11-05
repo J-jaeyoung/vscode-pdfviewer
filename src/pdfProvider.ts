@@ -8,6 +8,10 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
   private readonly _previews = new Set<PdfPreview>();
   private _activePreview: PdfPreview | undefined;
 
+  private readonly _onDidChangePreviews = new vscode.EventEmitter<void>();
+  /** Fires when a preview is opened or closed. */
+  public readonly onDidChangePreviews = this._onDidChangePreviews.event;
+
   constructor(
     private readonly extensionRoot: vscode.Uri,
     private readonly highlights: HighlightStore
@@ -29,10 +33,15 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
     );
     this._previews.add(preview);
     this.setActivePreview(preview);
+    this._onDidChangePreviews.fire();
 
     webviewEditor.onDidDispose(() => {
       preview.dispose();
       this._previews.delete(preview);
+      if (this._activePreview === preview) {
+        this.setActivePreview(undefined);
+      }
+      this._onDidChangePreviews.fire();
     });
 
     webviewEditor.onDidChangeViewState(() => {
@@ -46,6 +55,23 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
 
   public get activePreview(): PdfPreview {
     return this._activePreview;
+  }
+
+  /** An open preview of `resource`, preferring the active one. */
+  public findPreview(resource: vscode.Uri): PdfPreview | undefined {
+    const key = resource.toString();
+    if (
+      this._activePreview &&
+      this._activePreview.resource.toString() === key
+    ) {
+      return this._activePreview;
+    }
+    for (const preview of this._previews) {
+      if (preview.resource.toString() === key) {
+        return preview;
+      }
+    }
+    return undefined;
   }
 
   private setActivePreview(value: PdfPreview | undefined): void {
