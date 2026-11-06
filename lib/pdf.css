@@ -69,3 +69,112 @@ html, body {
     fill: rgb(255, 120, 0);
   }
 }
+
+/* fzf-style line finder (lib/fzf.js): Ctrl+F twice in the find bar. */
+.vscode-pdf-fzf {
+  position: absolute;
+  top: 36px;
+  inset-inline-start: 64px;
+  z-index: 30000;
+  width: min(760px, calc(100% - 80px));
+  background-color: var(--doorhanger-bg-color);
+  border: 1px solid var(--doorhanger-border-color);
+  border-radius: 2px;
+  box-shadow: 0 1px 5px var(--doorhanger-border-color), 0 0 0 1px var(--doorhanger-border-color);
+  color: var(--main-color);
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: 12px;
+}
+.vscode-pdf-fzf[hidden] {
+  display: none;
+}
+.vscode-pdf-fzf-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--doorhanger-separator-color);
+}
+.vscode-pdf-fzf-prompt {
+  color: rgb(214, 110, 0);
+  font-weight: bold;
+}
+.vscode-pdf-fzf-input {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 4px;
+  border: 1px solid var(--field-border-color);
+  border-radius: 2px;
+  background-color: var(--field-bg-color);
+  color: var(--field-color);
+  font: inherit;
+  outline: none;
+}
+.vscode-pdf-fzf-count {
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.vscode-pdf-fzf-list {
+  max-height: min(50vh, 420px);
+  overflow-y: auto;
+}
+.vscode-pdf-fzf-row {
+  display: flex;
+  gap: 8px;
+  padding: 1px 8px;
+  line-height: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.vscode-pdf-fzf-row:hover {
+  background-color: var(--doorhanger-hover-bg-color);
+}
+.vscode-pdf-fzf-row.selected {
+  background-color: var(--toggled-btn-bg-color);
+}
+.vscode-pdf-fzf-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vscode-pdf-fzf-text b {
+  color: rgb(214, 110, 0);
+}
+.vscode-pdf-fzf-page {
+  opacity: 0.6;
+}
+.vscode-pdf-fzf-more,
+.vscode-pdf-fzf-hint {
+  padding: 2px 8px;
+  opacity: 0.6;
+}
+.vscode-pdf-fzf-hint {
+  border-top: 1px solid var(--doorhanger-separator-color);
+}
+@media (prefers-color-scheme: dark) {
+  .vscode-pdf-fzf-prompt,
+  .vscode-pdf-fzf-text b {
+    color: rgb(255, 170, 70);
+  }
+}
+/* The line jumped to from the finder, briefly. */
+.pdfViewer .page .vscode-pdf-fzf-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.vscode-pdf-fzf-hit {
+  position: absolute;
+  background-color: rgb(255, 150, 30);
+  border-radius: 2px;
+  animation: vscode-pdf-fzf-hit 2.4s ease-out forwards;
+}
+@keyframes vscode-pdf-fzf-hit {
+  0%, 60% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0;
+  }
+}

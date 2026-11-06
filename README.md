@@ -19,6 +19,18 @@ Highlights are saved by the extension per file path; the PDF file itself is not 
 so they are only visible in this viewer. They work only where the PDF has selectable text.
 The shortcut can be changed in Keyboard Shortcuts (`pdf-preview.toggleHighlight`).
 
+## fzf-style find
+
+In the find bar (`Ctrl+F`), press `Ctrl+F` again to open an fzf-style finder; press it once more to go back to the normal find bar.
+It lists matching lines best first (fzf's scoring) and jumps to the one you pick (`↑`/`↓`, `Enter` or click; `Esc` closes).
+Matching is stricter than fzf's, so results stay close to what you typed:
+
+- Space-separated words must appear in that order (`kernel exploit`).
+- A word matches as a plain substring, or as pieces that each start a word in consecutive words:
+  `dcred` finds "DirtyCred", `privesc` finds "privilege escalation", `uaf` finds "use-after-free" (but not "described").
+- `'word` matches exactly, `!word` excludes lines; a word with an uppercase letter is case-sensitive.
+- A phrase that wraps onto the next line still matches.
+
 ## Contribute
 
 ### Upgrade PDF.js
@@ -39,6 +51,8 @@ The shortcut can be changed in Keyboard Shortcuts (`pdf-preview.toggleHighlight`
 1. Remove the `Ctrl/Cmd+P` print `keydown` listener from lib/web/viewer.js (search for `window.print();` near `"keydown"`).
    It stops propagation, so VS Code never receives Quick Open (`Ctrl+P`) or the Command Palette (`Ctrl+Shift+P`).
 1. Remove the `Ctrl/Cmd+S` (keyCode 83) `download` case from `webViewerKeyDown` in lib/web/viewer.js; that key is bound to the highlight command.
+1. Check that the fzf-style finder (lib/fzf.js) still works: it uses `PDFViewerApplication.findBar`
+   (`opened`, `bar`, `findField`, `open()`, `close()`, `dispatchEvent()`) and the text layer's `textDivs`/`textContentItemsStr`.
 
 ## Change log
 See [CHANGELOG.md](CHANGELOG.md).
