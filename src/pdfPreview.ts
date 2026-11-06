@@ -226,6 +226,7 @@ export class PdfPreview extends Disposable {
 <script src="${resolveAsUri('lib', 'build', 'pdf.js')}"></script>
 <script src="${resolveAsUri('lib', 'build', 'pdf.worker.js')}"></script>
 <script src="${resolveAsUri('lib', 'web', 'viewer.js')}"></script>
+<script src="${resolveAsUri('lib', 'fzf.js')}"></script>
 <script src="${resolveAsUri('lib', 'main.js')}"></script>
 </head>`;
 
