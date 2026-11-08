@@ -51,6 +51,9 @@ Matching is stricter than fzf's, so results stay close to what you typed:
 1. Remove the `Ctrl/Cmd+P` print `keydown` listener from lib/web/viewer.js (search for `window.print();` near `"keydown"`).
    It stops propagation, so VS Code never receives Quick Open (`Ctrl+P`) or the Command Palette (`Ctrl+Shift+P`).
 1. Remove the `Ctrl/Cmd+S` (keyCode 83) `download` case from `webViewerKeyDown` in lib/web/viewer.js; that key is bound to the highlight command.
+1. lib/build/pdf.js and pdf.worker.js carry a backport (search for `vscode-pdf:` and `case "Pattern":` in the `commonobj` handler):
+   shading patterns inside Type3 glyphs (e.g. emoji in Chrome-printed PDFs) are document-wide objects, so pages that reuse such a font no longer render blank.
+   PDF.js versions after 3.1.81 already have this; check that a new version does before dropping it.
 1. Check that the fzf-style finder (lib/fzf.js) still works: it uses `PDFViewerApplication.findBar`
    (`opened`, `bar`, `findField`, `open()`, `close()`, `dispatchEvent()`) and the text layer's `textDivs`/`textContentItemsStr`.
 
