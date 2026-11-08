@@ -132,7 +132,7 @@
           "pattern": "^(\\d+(?:\\.\\d+)?|auto|page-actual|page-fit|page-width)$"
         },
         "pdf-preview.default.sidebar": {
-          "markdownDescription": "Show the sidebar on load. The default visibility of sidebar for preview.",
+          "markdownDescription": "Show the sidebar on load. The default visibility of sidebar for preview. When off, the sidebar also starts closed for PDFs that ask to open with their outline and for PDFs where it was left open. Toggle it with `F4`.",
           "type": "boolean",
           "default": false
         },

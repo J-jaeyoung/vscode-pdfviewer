@@ -19,6 +19,16 @@ Highlights are saved by the extension per file path; the PDF file itself is not 
 so they are only visible in this viewer. They work only where the PDF has selectable text.
 The shortcut can be changed in Keyboard Shortcuts (`pdf-preview.toggleHighlight`).
 
+## Zoom
+
+While the PDF has focus, `Ctrl+=`/`Ctrl++` and `Ctrl+-` (`Cmd` on macOS, numpad keys too) zoom the PDF instead of the VS Code window.
+Click outside the PDF to zoom the window as usual.
+
+`Ctrl+O` (`Cmd+O`) fits the text body of the current page to the view width, with almost no margin,
+and scrolls so the body's left edge lines up with the view; the line at the top of the view stays there.
+The body is measured from the page's text, so margin notes such as arXiv stamps and line numbers are left out.
+While the PDF has focus this replaces VS Code's Open File.
+
 ## fzf-style find
 
 In the find bar (`Ctrl+F`), press `Ctrl+F` again to open an fzf-style finder; press it once more to go back to the normal find bar.
