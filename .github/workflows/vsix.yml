@@ -1,6 +1,6 @@
 # Builds the extension on every push to main and publishes it as the
 # `latest-build` release, so the newest .vsix is always at
-# https://github.com/J-jaeyoung/vscode-pdfviewer/releases/download/latest-build/pdf-highlight.vsix
+# https://github.com/J-jaeyoung/vscode-pdfviewer/releases/download/latest-build/vscode-pdfviewer.vsix
 name: Build VSIX
 
 on:
@@ -29,7 +29,7 @@ jobs:
       - run: npm ci
 
       # vscode:prepublish compiles the TypeScript first.
-      - run: npx vsce package -o pdf-highlight.vsix
+      - run: npx vsce package -o vscode-pdfviewer.vsix
 
       - name: Publish the latest-build release
         env:
@@ -41,12 +41,12 @@ jobs:
           Built automatically from \`main\` at ${GITHUB_SHA} (version ${version}).
           This release is replaced on every push to \`main\`.
 
-          **Install:** download \`pdf-highlight.vsix\`, then in VS Code open the Extensions view,
+          **Install:** download \`vscode-pdfviewer.vsix\`, then in VS Code open the Extensions view,
           click \`...\` → **Install from VSIX...** and pick the file (or run
-          \`code --install-extension pdf-highlight.vsix --force\`). Reload the window afterwards.
+          \`code --install-extension vscode-pdfviewer.vsix --force\`). Reload the window afterwards.
           EOF
           gh release delete latest-build --yes --cleanup-tag || true
-          gh release create latest-build pdf-highlight.vsix \
+          gh release create latest-build vscode-pdfviewer.vsix \
             --target "$GITHUB_SHA" \
             --title "Latest build (${short})" \
             --notes-file notes.md \

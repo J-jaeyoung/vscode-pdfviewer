@@ -6,10 +6,10 @@ Display pdf in VSCode.
 
 ## Install
 
-Download [pdf-highlight.vsix](https://github.com/J-jaeyoung/vscode-pdfviewer/releases/download/latest-build/pdf-highlight.vsix),
+Download [vscode-pdfviewer.vsix](https://github.com/J-jaeyoung/vscode-pdfviewer/releases/download/latest-build/vscode-pdfviewer.vsix),
 which is built from the latest `main` on every push.
 In VS Code, open the Extensions view, click `...` → **Install from VSIX...** and pick the file
-(or run `code --install-extension pdf-highlight.vsix --force`), then reload the window.
+(or run `code --install-extension vscode-pdfviewer.vsix --force`), then reload the window.
 
 - It replaces the Marketplace "vscode-pdf" if that is installed, since both use the ID `tomoki1207.pdf`.
   An extension installed from a VSIX is not auto-updated; install a newer build the same way.
