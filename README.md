@@ -4,6 +4,18 @@ Display pdf in VSCode.
 
 ![screenshot](https://user-images.githubusercontent.com/3643499/84454816-98fcd600-ac96-11ea-822c-3ae1e1599a13.gif)
 
+## Install
+
+Download [pdf-highlight.vsix](https://github.com/J-jaeyoung/vscode-pdfviewer/releases/download/latest-build/pdf-highlight.vsix),
+which is built from the latest `main` on every push.
+In VS Code, open the Extensions view, click `...` → **Install from VSIX...** and pick the file
+(or run `code --install-extension pdf-highlight.vsix --force`), then reload the window.
+
+- It replaces the Marketplace "vscode-pdf" if that is installed, since both use the ID `tomoki1207.pdf`.
+  An extension installed from a VSIX is not auto-updated; install a newer build the same way.
+- With Remote-SSH or WSL, install it locally. It runs on the local side and opens PDFs on the remote too.
+- If LaTeX Workshop opens PDFs in its own viewer, use **Reopen Editor With...** → **Pdf Preview** on the tab.
+
 ## Highlights
 
 Select text in a PDF and press `Ctrl+S` (`Cmd+S` on macOS) (command **PDF: Toggle Highlight on Selection**) to highlight it.
